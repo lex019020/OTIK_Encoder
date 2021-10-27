@@ -102,19 +102,19 @@ namespace OTIK_Encoder
 
         public HashSet<HeaderError> GetErrors() => _errors;
 
-        public ulong GetFileCount() => _fileCount;
+        public ulong GetFileCount() => HasErrors() ? 0 : _fileCount;
 
-        public byte GetVersion() => _version;
+        public byte GetVersion() => (byte) (HasErrors() ? 0 : _version);
 
-        public RandSplitType GetRandSplitType() => (RandSplitType) _randSplit;
+        public RandSplitType GetRandSplitType() => HasErrors() ? 0 : (RandSplitType) _randSplit;
 
         public EntropicBasedCompressionType GEntropicBasedCompressionType()
-            => (EntropicBasedCompressionType) _entrCompr;
+            => HasErrors() ? 0 : (EntropicBasedCompressionType) _entrCompr;
 
         public ContextBasedCompressionType GetContextBasedCompressionType()
-            => (ContextBasedCompressionType) _cbCompr;
+            => HasErrors() ? 0 : (ContextBasedCompressionType) _cbCompr;
 
         public AntiInterferenceType GetAntiInterferenceType()
-            => (AntiInterferenceType) _antiinterf;
+            => HasErrors() ? 0 : (AntiInterferenceType) _antiinterf;
     }
 }
