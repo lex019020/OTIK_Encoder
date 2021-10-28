@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "OTIK_Encoder": {
+      "commandName": "Project",
+      "commandLineArgs": "-d D:\\test\\out D:\\test\\boba.otik"
+    }
+  }
+}

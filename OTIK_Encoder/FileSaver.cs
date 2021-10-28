@@ -16,7 +16,7 @@ namespace OTIK_Encoder
 
         public static bool IsCorrectSavePath(string path)
         {
-            return false;
+            return Directory.Exists(path);
         }
 
         public void AddFile(string name, List<byte> bytes)

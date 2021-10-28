@@ -53,7 +53,8 @@ namespace OTIK_Encoder
             {
                 name = _fileNames[0].Substring(_fileNames[0].LastIndexOf('\\') + 1);
                 bytes = new List<byte>(File.ReadAllBytes(_fileNames[0]));
-                return false;
+                _currentNum++;
+                return true;
             }
 
             bytes = new List<byte>(File.ReadAllBytes(_fileNames[_currentNum]));
