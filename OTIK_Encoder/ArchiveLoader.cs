@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace OTIK_Encoder
 {
@@ -10,7 +11,25 @@ namespace OTIK_Encoder
     {
         public static bool IsCorrectArchivePath(string path)
         {
+            if(File.Exists(path))
+            {
+                FileInfo fileInfo = new FileInfo(path);
+                FileStream stream = fileInfo.OpenRead();
+                byte[] header = new byte[12];
+                stream.Read(header, 0, 12);
+                ArchiveHeader headerChecker = new(new List<byte>(header));
+                return !headerChecker.HasErrors();
+            }
+
             return false;
+        }
+
+        private string _path;
+        private FileStream _stream;
+
+        public ArchiveLoader(string path)
+        {
+            _path = path;
         }
         //TODO:
         // List <string>: размер - имя
