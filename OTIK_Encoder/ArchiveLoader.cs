@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace OTIK_Encoder
 {
@@ -10,7 +11,7 @@ namespace OTIK_Encoder
 
         private readonly FileStream _stream;
         private long currentReadPos;
-        private readonly uint fileCounter;
+        private uint fileCounter;
         private readonly uint filesToRead;
 
         public ArchiveLoader(string path)
@@ -59,18 +60,18 @@ namespace OTIK_Encoder
 
             var readName = new byte[numName];
             _stream.Read(readName, 0, numName);
-            name = BitConverter.ToString(readName);
+            name = Encoding.Unicode.GetString(readName);
 
             var dataNumBytes = new byte[4];
             _stream.Read(dataNumBytes, 0, 4);
-            var numData = BitConverter.ToInt32(nameNumBytes);
+            var numData = BitConverter.ToInt32(dataNumBytes);
 
             var readData = new byte[numData];
             _stream.Read(readData, 0, numData);
             bytes = new List<byte>(readData);
 
             currentReadPos = _stream.Position;
-
+            fileCounter++;
             return true;
         }
 
@@ -86,11 +87,11 @@ namespace OTIK_Encoder
 
                 var readName = new byte[numName];
                 _stream.Read(readName, 0, numName);
-                var name = BitConverter.ToString(readName);
+                var name = Encoding.Unicode.GetString(readName);
 
                 var dataNumBytes = new byte[4];
                 _stream.Read(dataNumBytes, 0, 4);
-                var numData = BitConverter.ToInt32(nameNumBytes);
+                var numData = BitConverter.ToInt32(dataNumBytes);
                 _stream.Position += numData;
 
                 result.Add(name + " - " + numName + "bytes");

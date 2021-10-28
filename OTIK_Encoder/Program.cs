@@ -92,7 +92,7 @@ namespace OTIK_Encoder
                         return;
                     }
 
-                    inpath = args[2];
+                    inpath = args[1];
 
                     try
                     {
@@ -115,7 +115,7 @@ namespace OTIK_Encoder
                         return;
                     }
 
-                    inpath = args[2];
+                    inpath = args[1];
 
                     try
                     {
