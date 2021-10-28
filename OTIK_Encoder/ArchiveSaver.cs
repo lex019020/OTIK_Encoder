@@ -37,7 +37,7 @@ namespace OTIK_Encoder
         public void AppendFile(string path, IReadOnlyList<byte> data)
         {
             var pathBytes = Encoding.Unicode.GetBytes(path);
-            var pathlen = (short) pathBytes.Length;
+            var pathlen = (ushort) pathBytes.Length;
             var pathlenBytes = BitConverter.GetBytes(pathlen);
             var datalenBytes = BitConverter.GetBytes(data.Count);
             AppendBytes(pathlenBytes);
@@ -48,12 +48,12 @@ namespace OTIK_Encoder
 
         public void CloseConnection()
         {
-            stream.Close();
+            stream.Dispose();
         }
 
         public void DeleteAndCloseConnection()
         {
-            stream.Close();
+            stream.Dispose();
             fileInfo.Delete();
         }
 
