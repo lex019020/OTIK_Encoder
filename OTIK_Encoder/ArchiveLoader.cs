@@ -12,30 +12,19 @@ namespace OTIK_Encoder
         //TODO 12 to constant
         public static bool IsCorrectArchivePath(string path)
         {
-            if(File.Exists(path))
+            if (File.Exists(path))
             {
                 FileStream stream = File.OpenRead(path);
-                bool result = HeaderErrors(stream).Count == 0;
+
+                byte[] header = new byte[12];
+                stream.Read(header, 0, 12);
+                ArchiveHeader headerChecker = new(new List<byte>(header));
+                bool result = !headerChecker.HasErrors();
                 stream.Close();
                 return result;
             }
 
             return false;
-        }
-
-        private static List<string> HeaderErrors(FileStream stream)
-        {
-            List<string> result = new();
-            byte[] header = new byte[12];
-            stream.Read(header, 0, 12);
-            ArchiveHeader headerChecker = new(new List<byte>(header));
-            if(headerChecker.HasErrors())
-            {
-                HashSet<HeaderError> errors = headerChecker.GetErrors();
-                foreach(HeaderError error in errors)
-                    result.Add(error.ToString());
-            }
-            return result;
         }
 
         private FileStream _stream;
@@ -48,11 +37,7 @@ namespace OTIK_Encoder
             _stream = File.OpenRead(path);
             currentReadPos = 12;
             fileCounter = 0;
-
-            byte[] header = new byte[12];
-            _stream.Read(header, 0, 12);
-            ArchiveHeader headerChecker = new(new List<byte>(header));
-            filesToRead = headerChecker.GetFileCount();
+            filesToRead = GetArchiveHeader().GetFileCount();
         }
 
         public void CloseStream()
@@ -88,37 +73,36 @@ namespace OTIK_Encoder
             return true;
         }
 
-        //public List<string> getArchiveContent()
-        //{
-        //    int curPos = 12;
-        //    List<string> result;
-        //    for(int i = 0; i < filesToRead; i++)
-        //    {
-        //        //byte[] nameNumBytes = new byte[2];
-        //        //curPos += _stream.Read(nameNumBytes, currentReadPos, 2);
-        //        //var numName = BitConverter.ToUInt16(nameNumBytes);
+        public List<string> GetArchiveContent()
+        {
+            int curPos = 12;
+            List<string> result = new();
+            for (int i = 0; i < filesToRead; i++)
+            {
+                byte[] nameNumBytes = new byte[2];
+                curPos += _stream.Read(nameNumBytes, curPos, 2);
+                var numName = BitConverter.ToUInt16(nameNumBytes);
 
-        //        //byte[] readName = new byte[numName];
-        //        //curPos += _stream.Read(readName, currentReadPos, numName);
-        //        //string name = BitConverter.ToString(readName);
+                byte[] readName = new byte[numName];
+                curPos += _stream.Read(readName, curPos, numName);
+                string name = BitConverter.ToString(readName);
 
-        //        //byte[] dataNumBytes = new byte[4];
-        //        //curPos += _stream.Read(dataNumBytes, currentReadPos, 4);
-        //        //var numData = BitConverter.ToInt32(nameNumBytes);
-        //        //curPos += numData;
-        //    }
-        //}
+                byte[] dataNumBytes = new byte[4];
+                curPos += _stream.Read(dataNumBytes, curPos, 4);
+                var numData = BitConverter.ToInt32(nameNumBytes);
+                curPos += numData;
+
+                result.Add(name + " - " + numName.ToString() + "bytes");
+            }
+
+            return result;
+        }
 
         public ArchiveHeader GetArchiveHeader()
         {
             byte[] header = new byte[12];
             _stream.Read(header, 0, 12);
             return new ArchiveHeader(new List<byte>(header));
-        }
-
-        public List<string> HaveHeaderErrors()
-        {
-            return HeaderErrors(_stream);
         }
 
     }
