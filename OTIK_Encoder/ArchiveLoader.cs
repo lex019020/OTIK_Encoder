@@ -9,15 +9,15 @@ namespace OTIK_Encoder
 {
     class ArchiveLoader
     {
-        //TODO 12 to constant
+        private static int headerSize = 12;
         public static bool IsCorrectArchivePath(string path)
         {
             if (File.Exists(path))
             {
                 FileStream stream = File.OpenRead(path);
 
-                byte[] header = new byte[12];
-                stream.Read(header, 0, 12);
+                byte[] header = new byte[headerSize];
+                stream.Read(header, 0, headerSize);
                 ArchiveHeader headerChecker = new(new List<byte>(header));
                 bool result = !headerChecker.HasErrors();
                 stream.Close();
@@ -35,7 +35,7 @@ namespace OTIK_Encoder
         public ArchiveLoader(string path)
         {
             _stream = File.OpenRead(path);
-            currentReadPos = 12;
+            currentReadPos = headerSize;
             fileCounter = 0;
             filesToRead = GetArchiveHeader().GetFileCount();
         }
@@ -75,7 +75,7 @@ namespace OTIK_Encoder
 
         public List<string> GetArchiveContent()
         {
-            int curPos = 12;
+            int curPos = headerSize;
             List<string> result = new();
             for (int i = 0; i < filesToRead; i++)
             {
@@ -100,8 +100,8 @@ namespace OTIK_Encoder
 
         public ArchiveHeader GetArchiveHeader()
         {
-            byte[] header = new byte[12];
-            _stream.Read(header, 0, 12);
+            byte[] header = new byte[headerSize];
+            _stream.Read(header, 0, headerSize);
             return new ArchiveHeader(new List<byte>(header));
         }
 
