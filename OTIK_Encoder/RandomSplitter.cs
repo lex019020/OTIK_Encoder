@@ -6,7 +6,7 @@ namespace OTIK_Encoder
     class RandomSplitter : IHandler
     {
         private IHandler _nextHandler;
-        private bool _encode;
+        private readonly bool _encode;
 
         public RandomSplitter(bool encode)
         {
@@ -14,7 +14,7 @@ namespace OTIK_Encoder
             _nextHandler = null;
         }
 
-        public void Split(ref List<byte> data)
+        private void Split(ref List<byte> data)
         {
             var rand = new Random();
 
@@ -44,7 +44,7 @@ namespace OTIK_Encoder
             data.AddRange(result);
         }
 
-        public List<byte> Join(ref List<byte> data)
+        private void Join(ref List<byte> data)
         {
             int blocksNumber = 0;
             blocksNumber += ((int)data[0]) << 24;
@@ -52,15 +52,19 @@ namespace OTIK_Encoder
             blocksNumber += ((int)data[16]) << 8;
             blocksNumber += (int)data[24];
 
-            //4b - blockscount
-            //1b - blocklen
-            // block
+            int numberOfHandledBytes = 32;
+
             List<byte> result = new();
-            
+            for(int i = 0; i < blocksNumber; i++)
+            {
+                byte currentBlockSize = data[numberOfHandledBytes];
+                numberOfHandledBytes++;
+                result.AddRange(data.GetRange(numberOfHandledBytes, currentBlockSize));
+                numberOfHandledBytes += currentBlockSize;
+            }
 
-
-
-            return result;
+            data.Clear();
+            data.AddRange(result);
         }
 
         public void SetNextHandler(IHandler nextHandler)
@@ -68,19 +72,18 @@ namespace OTIK_Encoder
             _nextHandler = nextHandler;
         }
 
-        public void Handle(FileHandlingStruct handlingStruct)
+        public void Handle(ref FileHandlingStruct handlingStruct)
         {
             if (handlingStruct.randomSplit_1)
             {
                 if (_encode)
-                    Split(handlingStruct.bytes);
+                    Split(ref handlingStruct.bytes);
                 else
-                    Join(handlingStruct.bytes);
-
+                    Join(ref handlingStruct.bytes);
             }
 
             if (_nextHandler != null)
-                _nextHandler.Handle(handlingStruct);
+                _nextHandler.Handle(ref handlingStruct);
         }
     }
 }
