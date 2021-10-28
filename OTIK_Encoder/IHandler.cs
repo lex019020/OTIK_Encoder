@@ -8,7 +8,7 @@ namespace OTIK_Encoder
 {
     interface IHandler
     {
-        void SetNextHandler();
-        bool Handle();
+        void SetNextHandler(IHandler nextHandler);
+        void Handle(FileHandlingStruct handlingStruct);
     }
 }
