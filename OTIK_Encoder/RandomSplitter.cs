@@ -72,7 +72,7 @@ namespace OTIK_Encoder
             blocksNumber += data[16] << 8;
             blocksNumber += data[24];
 
-            var numberOfHandledBytes = 32;
+            var numberOfHandledBytes = 4;
 
             List<byte> result = new();
             for (var i = 0; i < blocksNumber; i++)
