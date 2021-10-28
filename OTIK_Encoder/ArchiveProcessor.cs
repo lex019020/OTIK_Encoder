@@ -29,7 +29,7 @@ namespace OTIK_Encoder
 
             var arcSaver = new ArchiveSaver(output);
 
-            //arcSaver.
+            arcSaver.AppendBytes(header.GetHeaderBytes());
 
             var handler1 = new RandomSplitter(true);
             var handlingStruct = new FileHandlingStruct() {randomSplit_1 = rSplitting == RandSplitType.RandomSplit };
@@ -39,7 +39,7 @@ namespace OTIK_Encoder
                 handlingStruct.bytes = bytes;
                 handler1.Handle(ref handlingStruct);
                 
-                // todo write bytes
+                arcSaver.AppendFile(name, bytes);
             }
         }
 
@@ -56,6 +56,24 @@ namespace OTIK_Encoder
 
             var handler1 = new RandomSplitter(false);
             //var handlingStruct = new FileHandlingStruct() { randomSplit_1 = rSplitting == RandSplitType.RandomSplit };
+        }
+
+        public static List<string> ListFiles(string path)
+        {
+            if (!ArchiveLoader.IsCorrectArchivePath(path))
+                throw new Exception("Input path is incorrect!");
+
+            // todo read filenames
+
+            return new List<string>();// todo
+        }
+
+        public static bool CheckErrors(string path)
+        {
+            if (!ArchiveLoader.IsCorrectArchivePath(path))
+                throw new Exception("Input path is incorrect!");
+
+            return false; // todo
         }
     }
 }

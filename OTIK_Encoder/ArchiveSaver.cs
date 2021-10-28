@@ -37,12 +37,12 @@ namespace OTIK_Encoder
         public void AppendFile(string path, IReadOnlyList<byte> data)
         {
             var pathBytes = Encoding.Unicode.GetBytes(path);
-            var namelen = (short) pathBytes.Length;
-            var namelenBytes = BitConverter.GetBytes(namelen);
-            var datalenbytes = BitConverter.GetBytes(data.Count);
-            AppendBytes(namelenBytes);
+            var pathlen = (short) pathBytes.Length;
+            var pathlenBytes = BitConverter.GetBytes(pathlen);
+            var datalenBytes = BitConverter.GetBytes(data.Count);
+            AppendBytes(pathlenBytes);
             AppendBytes(pathBytes);
-            AppendBytes(datalenbytes);
+            AppendBytes(datalenBytes);
             AppendBytes(data);
         }
 
