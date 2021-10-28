@@ -9,6 +9,7 @@ namespace OTIK_Encoder
 {
     class ArchiveLoader
     {
+        //TODO 12 to constant
         public static bool IsCorrectArchivePath(string path)
         {
             if(File.Exists(path))
@@ -87,8 +88,33 @@ namespace OTIK_Encoder
             return true;
         }
 
-        //TODO:
-        // прочитать имена и размеры
+        //public List<string> getArchiveContent()
+        //{
+        //    int curPos = 12;
+        //    List<string> result;
+        //    for(int i = 0; i < filesToRead; i++)
+        //    {
+        //        //byte[] nameNumBytes = new byte[2];
+        //        //curPos += _stream.Read(nameNumBytes, currentReadPos, 2);
+        //        //var numName = BitConverter.ToUInt16(nameNumBytes);
+
+        //        //byte[] readName = new byte[numName];
+        //        //curPos += _stream.Read(readName, currentReadPos, numName);
+        //        //string name = BitConverter.ToString(readName);
+
+        //        //byte[] dataNumBytes = new byte[4];
+        //        //curPos += _stream.Read(dataNumBytes, currentReadPos, 4);
+        //        //var numData = BitConverter.ToInt32(nameNumBytes);
+        //        //curPos += numData;
+        //    }
+        //}
+
+        public ArchiveHeader GetArchiveHeader()
+        {
+            byte[] header = new byte[12];
+            _stream.Read(header, 0, 12);
+            return new ArchiveHeader(new List<byte>(header));
+        }
 
         public List<string> HaveHeaderErrors()
         {
