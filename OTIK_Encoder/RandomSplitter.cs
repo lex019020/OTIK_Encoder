@@ -52,7 +52,7 @@ namespace OTIK_Encoder
 
                 result.Add(randSize);
                 result.AddRange(data.GetRange(numberOfSplitted, randSize));
-
+                numberOfSplitted += randSize;
                 blocksCounter++;
             }
 
