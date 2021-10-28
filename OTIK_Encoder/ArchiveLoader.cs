@@ -8,6 +8,10 @@ namespace OTIK_Encoder
 {
     class ArchiveLoader
     {
+        public static bool IsCorrectArchivePath()
+        {
+            return false;
+        }
         //TODO:
         // List <string>: размер - имя
         // вернуть false, если ошибки (в лист строки ошибок)

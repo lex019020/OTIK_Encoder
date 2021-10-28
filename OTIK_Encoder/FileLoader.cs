@@ -14,10 +14,12 @@ namespace OTIK_Encoder
         private readonly bool _isDirectory = false;
         private int _currentNum = 0;
 
-        public static bool PathIsCorrect (string path)
+        public static bool IsCorrectLoadPath (string path)
         {
             return File.Exists(path) || Directory.Exists(path);
         }
+
+
 
         public FileLoader(string path)
         {

@@ -8,6 +8,12 @@ namespace OTIK_Encoder
 {
     class ArchiveSaver
     {
+
+        public static bool IsCorrectArchivePath()
+        {
+            return false;
+        }
+
         public void AppendFile()
         {
 

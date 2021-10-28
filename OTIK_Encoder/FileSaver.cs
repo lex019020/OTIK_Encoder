@@ -8,11 +8,16 @@ namespace OTIK_Encoder
 {
     class FileSaver
     {
-        private readonly string path;
+        public static bool IsCorrectSavePath()
+        {
+            return false;
+        }
+
+        private readonly string _path;
 
         public FileSaver(string path) 
         {
-            
+            _path = path;
         }
 
         public void AddFile(string name, List<byte> bytes) 

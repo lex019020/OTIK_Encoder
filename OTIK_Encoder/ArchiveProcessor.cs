@@ -12,8 +12,8 @@ namespace OTIK_Encoder
             ContextBasedCompressionType cbCompr, AntiInterferenceType antiInterf, 
             string input, string output)
         {
-            if (  !FileLoader.PathIsCorrect(input)       // todo check this shit
-                ||!FileLoader.PathIsCorrect(output))
+            if (  !FileLoader.IsCorrectLoadPath(input)       // todo check this shit
+                ||!FileLoader.IsCorrectLoadPath(output))
                 throw new Exception("Input path is incorrect!");
 
             var manager = new FileLoader(input);
