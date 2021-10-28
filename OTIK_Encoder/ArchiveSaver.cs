@@ -16,7 +16,7 @@ namespace OTIK_Encoder
             if (!IsCorrectArchivePath(filename)) return;
 
             fileInfo = new FileInfo(filename);
-            
+
             stream = fileInfo.Exists ? fileInfo.OpenWrite() : fileInfo.Create();
         }
 

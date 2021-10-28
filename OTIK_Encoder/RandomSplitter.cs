@@ -58,21 +58,13 @@ namespace OTIK_Encoder
 
             data.Clear();
             data.AddRange(BitConverter.GetBytes(blocksCounter));
-            //data.Add((byte) (blocksCounter >> 24));
-            //data.Add((byte) (blocksCounter >> 16));
-            //data.Add((byte) (blocksCounter >> 8));
-            //data.Add((byte) blocksCounter);
             data.AddRange(result);
         }
 
         private void Join(ref List<byte> data)
         {
-            byte[] blnum = { data[0], data[1], data[2], data[3]};
+            byte[] blnum = {data[0], data[1], data[2], data[3]};
             var blocksNumber = BitConverter.ToInt32(blnum);
-            //blocksNumber += data[0] << 24;
-            //blocksNumber += data[1] << 16;
-            //blocksNumber += data[2] << 8;
-            //blocksNumber += data[3];
 
             var numberOfHandledBytes = 4;
 

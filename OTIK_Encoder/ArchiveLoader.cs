@@ -10,9 +10,9 @@ namespace OTIK_Encoder
         private static readonly int headerSize = 12;
 
         private readonly FileStream _stream;
+        private readonly uint filesToRead;
         private long currentReadPos;
         private uint fileCounter;
-        private readonly uint filesToRead;
 
         public ArchiveLoader(string path)
         {
@@ -77,7 +77,7 @@ namespace OTIK_Encoder
 
         public List<string> GetArchiveContent()
         {
-            _stream.Position = 0;
+            _stream.Position = 12;
             List<string> result = new();
             for (var i = 0; i < filesToRead; i++)
             {
@@ -94,7 +94,7 @@ namespace OTIK_Encoder
                 var numData = BitConverter.ToInt32(dataNumBytes);
                 _stream.Position += numData;
 
-                result.Add(name + " - " + numName + "bytes");
+                result.Add(numData + " bytes  -  " + name);
             }
 
             return result;

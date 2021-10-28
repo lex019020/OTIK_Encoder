@@ -15,12 +15,10 @@ namespace OTIK_Encoder
 
             string inpath;
             string outpath;
-            char mode;
 
             switch (args[0]) // mode
             {
                 case "-c": // compress
-                    mode = 'c';
 
                     if (args.Length != 4)
                     {
@@ -44,6 +42,9 @@ namespace OTIK_Encoder
                             {
                                 ArchiveProcessor.Encode(rSplitting, entCompr, cbCompr,
                                     antiInterf, inpath, outpath);
+                                Console.WriteLine("");
+                                Console.WriteLine("Compressed successfully");
+                                Console.WriteLine("");
                             }
                             catch (Exception e)
                             {
@@ -59,7 +60,6 @@ namespace OTIK_Encoder
 
                     break;
                 case "-d": // decompress
-                    mode = 'd';
 
                     if (args.Length != 3)
                     {
@@ -74,6 +74,9 @@ namespace OTIK_Encoder
                     try
                     {
                         ArchiveProcessor.Decode(inpath, outpath);
+                        Console.WriteLine("");
+                        Console.WriteLine("Decompressed successfully");
+                        Console.WriteLine("");
                     }
                     catch (Exception e)
                     {
@@ -83,7 +86,6 @@ namespace OTIK_Encoder
 
                     break;
                 case "-t": // test
-                    mode = 't';
 
                     if (args.Length != 2)
                     {
@@ -106,7 +108,6 @@ namespace OTIK_Encoder
 
                     break;
                 case "-l": // list
-                    mode = 'l';
 
                     if (args.Length != 2)
                     {
@@ -120,7 +121,7 @@ namespace OTIK_Encoder
                     try
                     {
                         var files = ArchiveProcessor.ListFiles(inpath);
-                        Console.WriteLine("Files list:   [size  name]");
+                        Console.WriteLine("Files list:   [size (compressed)    name]");
                         Console.WriteLine("");
                         foreach (var filestr in files) Console.WriteLine(filestr);
                         Console.WriteLine("");
