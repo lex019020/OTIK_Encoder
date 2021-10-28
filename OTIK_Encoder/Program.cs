@@ -158,9 +158,11 @@ namespace OTIK_Encoder
             Console.WriteLine(" [output] (only in modes -c/-d)");
             Console.WriteLine(
                 "     output filename (for -c) or path (for -d); if contains whitespaces - write it in double quotes");
+            Console.WriteLine("         if mode is -c, must end in .otik");
             Console.WriteLine("");
             Console.WriteLine(" *[input] is input file / directory");
-            Console.WriteLine("     if input path contains whitespaces, path must be in double quotes");
+            Console.WriteLine("     if input path contains whitespaces, path must be in double quotes.");
+            Console.WriteLine("");
         }
     }
 }
