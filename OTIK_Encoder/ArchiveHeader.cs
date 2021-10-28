@@ -1,52 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Exception = System.Exception;
 
 namespace OTIK_Encoder
 {
+    public enum HeaderError
+    {
+        IncorrectLength,
+        IncorrectSignature,
+        NewerVersion,
+        IncorrectRandSplittingType,
+        IncorrectEntropicComprType,
+        IncorrectContextBasedComprType,
+        IncorrectAntiInterfType,
+        UnsupportedFeatures,
+    };
+
+    public enum RandSplitType
+    {
+        NoSplit,
+        RandomSplit,
+    };
+
+    public enum EntropicBasedCompressionType
+    {
+        None,
+    };
+
+    public enum ContextBasedCompressionType
+    {
+        None,
+    };
+
+    public enum AntiInterferenceType
+    {
+        None,
+    };
+
+    public enum Version
+    {
+        V1,
+    }
+
     class ArchiveHeader // version 1
     {
-        public enum HeaderError
-        {
-            IncorrectLength,
-            IncorrectSignature,
-            NewerVersion,
-            IncorrectRandSplittingType,
-            IncorrectEntropicComprType,
-            IncorrectContextBasedComprType,
-            IncorrectAntiInterfType,
-            UnsupportedFeatures,
-        };
-
-        public enum RandSplitType
-        {
-            NoSplit,
-            RandomSplit,
-        };
-
-        public enum EntropicBasedCompressionType
-        {
-            None,
-        };
-
-        public enum ContextBasedCompressionType
-        {
-            None,
-        };
-
-        public enum AntiInterferenceType
-        {
-            None,
-        };
-
-        public enum Version
-        {
-            v1,
-        }
-
         private byte _version, _randSplit, _entrCompr, _cbCompr, _antiinterf;
         private ulong _fileCount;
         private readonly bool _isReadFromFile;
@@ -99,8 +96,8 @@ namespace OTIK_Encoder
             _antiinterf = headerBytes[8];
 
             _fileCount = 0;
-            _fileCount += (ulong) (headerBytes[9] << 16);
-            _fileCount += (ulong) (headerBytes[10] << 8);
+            _fileCount += (ulong) ((ulong)headerBytes[9] << 16);
+            _fileCount += (ulong) ((ulong)headerBytes[10] << 8);
             _fileCount += (ulong)  headerBytes[11];
 
             if (_randSplit > 1)
