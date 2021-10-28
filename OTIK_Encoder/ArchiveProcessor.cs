@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -37,6 +38,20 @@ namespace OTIK_Encoder
                 
                 // todo write bytes
             }
+        }
+
+        public static void Decode(string input, string output)
+        {
+            if (!FileLoader.PathIsCorrect(input)       // todo check this shit
+                || !FileLoader.PathIsCorrect(output))
+                throw new Exception("Input path is incorrect!");
+
+            var manager = new FileLoader(input);
+
+            // todo read header
+
+            var handler1 = new RandomSplitter(false);
+            //var handlingStruct = new FileHandlingStruct() { randomSplit_1 = rSplitting == RandSplitType.RandomSplit };
         }
     }
 }
