@@ -9,6 +9,6 @@ namespace OTIK_Encoder
     interface IHandler
     {
         void SetNextHandler(IHandler nextHandler);
-        void Handle(FileHandlingStruct handlingStruct);
+        void Handle(ref FileHandlingStruct handlingStruct);
     }
 }
