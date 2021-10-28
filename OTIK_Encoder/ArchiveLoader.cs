@@ -9,7 +9,7 @@ namespace OTIK_Encoder
         private static readonly int headerSize = 12;
 
         private readonly FileStream _stream;
-        private int currentReadPos;
+        private long currentReadPos;
         private readonly uint fileCounter;
         private readonly uint filesToRead;
 
@@ -45,6 +45,7 @@ namespace OTIK_Encoder
 
         public bool ReadNextFile(out string name, out List<byte> bytes)
         {
+            _stream.Position = currentReadPos;
             if (fileCounter == filesToRead)
             {
                 name = "";
@@ -53,42 +54,44 @@ namespace OTIK_Encoder
             }
 
             var nameNumBytes = new byte[2];
-            currentReadPos += _stream.Read(nameNumBytes, currentReadPos, 2);
+            _stream.Read(nameNumBytes, 0, 2);
             var numName = BitConverter.ToUInt16(nameNumBytes);
 
             var readName = new byte[numName];
-            currentReadPos += _stream.Read(readName, currentReadPos, numName);
+            _stream.Read(readName, 0, numName);
             name = BitConverter.ToString(readName);
 
             var dataNumBytes = new byte[4];
-            currentReadPos += _stream.Read(dataNumBytes, currentReadPos, 4);
+            _stream.Read(dataNumBytes, 0, 4);
             var numData = BitConverter.ToInt32(nameNumBytes);
 
             var readData = new byte[numData];
-            currentReadPos += _stream.Read(readData, currentReadPos, numData);
+            _stream.Read(readData, 0, numData);
             bytes = new List<byte>(readData);
+
+            currentReadPos = _stream.Position;
 
             return true;
         }
 
         public List<string> GetArchiveContent()
         {
-            var curPos = headerSize;
+            _stream.Position = 0;
             List<string> result = new();
             for (var i = 0; i < filesToRead; i++)
             {
                 var nameNumBytes = new byte[2];
-                curPos += _stream.Read(nameNumBytes, curPos, 2);
+                _stream.Read(nameNumBytes, 0, 2);
                 var numName = BitConverter.ToUInt16(nameNumBytes);
 
                 var readName = new byte[numName];
-                curPos += _stream.Read(readName, curPos, numName);
+                _stream.Read(readName, 0, numName);
                 var name = BitConverter.ToString(readName);
 
                 var dataNumBytes = new byte[4];
-                curPos += _stream.Read(dataNumBytes, curPos, 4);
+                _stream.Read(dataNumBytes, 0, 4);
                 var numData = BitConverter.ToInt32(nameNumBytes);
-                curPos += numData;
+                _stream.Position += numData;
 
                 result.Add(name + " - " + numName + "bytes");
             }
@@ -99,6 +102,7 @@ namespace OTIK_Encoder
         public ArchiveHeader GetArchiveHeader()
         {
             var header = new byte[headerSize];
+            _stream.Position = 0;
             _stream.Read(header, 0, headerSize);
             return new ArchiveHeader(new List<byte>(header));
         }
