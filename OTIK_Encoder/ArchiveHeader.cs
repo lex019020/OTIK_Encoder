@@ -236,7 +236,7 @@ namespace OTIK_Encoder
         /// Set files count. Limit: 2^24. If header is read from file, method does nothing.
         /// </summary>
         /// <param name="fcount">Limit: 2^24</param>
-        public void SetFilesCount(uint fcount)
+        public void SetFilesCount(int fcount)
         {
             if(_isReadFromFile) return;
             if (fcount >= Math.Pow(2, 24)) throw new Exception("WTF are you trying to compress????");

@@ -7,7 +7,7 @@ using System.IO;
 
 namespace OTIK_Encoder
 {
-    class FileManager
+    class FileLoader
     {
         private readonly string _dirPath = "";
         private readonly List<string> _fileNames;
@@ -19,7 +19,7 @@ namespace OTIK_Encoder
             return File.Exists(path) || Directory.Exists(path);
         }
 
-        public FileManager(string path)
+        public FileLoader(string path)
         {
             _fileNames = new();
             if (Directory.Exists(path))

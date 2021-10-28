@@ -12,27 +12,31 @@ namespace OTIK_Encoder
             ContextBasedCompressionType cbCompr, AntiInterferenceType antiInterf, 
             string input, string output)
         {
-            if (  !FileManager.PathIsCorrect(input)       // todo check this shit
-                ||!FileManager.PathIsCorrect(output))
-                throw new Exception("Input is incorrect!");
+            if (  !FileLoader.PathIsCorrect(input)       // todo check this shit
+                ||!FileLoader.PathIsCorrect(output))
+                throw new Exception("Input path is incorrect!");
 
-            var manager = new FileManager(input);
+            var manager = new FileLoader(input);
 
-            // todo create & write header
+            var header = new ArchiveHeader();
+            header.SetFilesCount(manager.GetNumberOfFiles());
+            header.SetRandSplitType(rSplitting);
+            header.SetAntiInterferenceType(antiInterf);
+            header.SetContextBasedCompressionType(cbCompr);
+            header.SetEntropicBasedCompressionType(entCompr);
+
+            // todo write header
 
             var handler1 = new RandomSplitter(true);
-
             var handlingStruct = new FileHandlingStruct() {randomSplit_1 = rSplitting == RandSplitType.RandomSplit };
 
             while (manager.GetNextFile(out var bytes, out var name))
             {
                 handlingStruct.bytes = bytes;
-
-                handler1.Handle(handlingStruct);
+                handler1.Handle(ref handlingStruct);
+                
+                // todo write bytes
             }
-
-            // todo write this shit
-
         }
     }
 }
