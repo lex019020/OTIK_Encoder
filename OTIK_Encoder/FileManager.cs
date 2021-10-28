@@ -63,5 +63,9 @@ namespace OTIK_Encoder
             return true;
         }
 
+        public int GetNumberOfFiles()
+        {
+            return _fileNames.Count();
+        }
     }
 }
