@@ -118,7 +118,7 @@ namespace OTIK_Encoder
             Console.WriteLine("     r1 Split files to random pieces size of 1-16 bytes");
             Console.WriteLine("");
             Console.WriteLine(" [output] (only in modes -c/-d)");
-            Console.WriteLine("     output filename; if contains whitespaces - write it in double quotes");
+            Console.WriteLine("     output filename (for -c) or path (for -d); if contains whitespaces - write it in double quotes");
             Console.WriteLine("");
             Console.WriteLine(" *[input] is input file / directory");
             Console.WriteLine("     if input path contains whitespaces, path must be in double quotes");

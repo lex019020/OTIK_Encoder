@@ -45,7 +45,7 @@ namespace OTIK_Encoder
     class ArchiveHeader // version 1
     {
         private byte _version, _randSplit, _entrCompr, _cbCompr, _antiinterf;
-        private ulong _fileCount;
+        private uint _fileCount;
         private readonly bool _isReadFromFile;
         private readonly HashSet<HeaderError> _errors = new();
 
@@ -96,9 +96,9 @@ namespace OTIK_Encoder
             _antiinterf = headerBytes[8];
 
             _fileCount = 0;
-            _fileCount += (ulong) ((ulong)headerBytes[9] << 16);
-            _fileCount += (ulong) ((ulong)headerBytes[10] << 8);
-            _fileCount += (ulong)  headerBytes[11];
+            _fileCount += (uint) ((uint)headerBytes[9] << 16);
+            _fileCount += (uint) ((uint)headerBytes[10] << 8);
+            _fileCount += (uint)  headerBytes[11];
 
             if (_randSplit > 1)
             {
@@ -129,7 +129,7 @@ namespace OTIK_Encoder
 
         public HashSet<HeaderError> GetErrors() => _errors;
 
-        public ulong GetFileCount() => HasErrors() ? 0 : _fileCount;
+        public uint GetFileCount() => HasErrors() ? 0 : _fileCount;
 
         public Version GetVersion() =>  HasErrors() ? 0 : (Version)_version;
 
@@ -236,7 +236,7 @@ namespace OTIK_Encoder
         /// Set files count. Limit: 2^24. If header is read from file, method does nothing.
         /// </summary>
         /// <param name="fcount">Limit: 2^24</param>
-        public void SetFilesCount(ulong fcount)
+        public void SetFilesCount(uint fcount)
         {
             if(_isReadFromFile) return;
             if (fcount >= Math.Pow(2, 24)) throw new Exception("WTF are you trying to compress????");
