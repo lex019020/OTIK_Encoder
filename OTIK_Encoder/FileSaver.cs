@@ -8,7 +8,7 @@ namespace OTIK_Encoder
 {
     class FileSaver
     {
-        public static bool IsCorrectSavePath()
+        public static bool IsCorrectSavePath(string path)
         {
             return false;
         }

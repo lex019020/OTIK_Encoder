@@ -8,7 +8,7 @@ namespace OTIK_Encoder
 {
     class ArchiveLoader
     {
-        public static bool IsCorrectArchivePath()
+        public static bool IsCorrectArchivePath(string path)
         {
             return false;
         }

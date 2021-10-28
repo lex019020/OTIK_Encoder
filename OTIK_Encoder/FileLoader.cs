@@ -19,8 +19,6 @@ namespace OTIK_Encoder
             return File.Exists(path) || Directory.Exists(path);
         }
 
-
-
         public FileLoader(string path)
         {
             _fileNames = new();

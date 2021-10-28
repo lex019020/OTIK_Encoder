@@ -9,7 +9,7 @@ namespace OTIK_Encoder
     class ArchiveSaver
     {
 
-        public static bool IsCorrectArchivePath()
+        public static bool IsCorrectArchivePath(string path)
         {
             return false;
         }
