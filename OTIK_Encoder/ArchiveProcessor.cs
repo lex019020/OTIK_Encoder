@@ -13,9 +13,10 @@ namespace OTIK_Encoder
             ContextBasedCompressionType cbCompr, AntiInterferenceType antiInterf, 
             string input, string output)
         {
-            if (  !FileLoader.IsCorrectLoadPath(input)       // todo check this shit
-                ||!FileLoader.IsCorrectLoadPath(output))
+            if (!FileLoader.IsCorrectLoadPath(input))
                 throw new Exception("Input path is incorrect!");
+            if (!ArchiveSaver.IsCorrectArchivePath(output))
+                throw new Exception("Output path is incorrect!");
 
             var manager = new FileLoader(input);
 
@@ -26,7 +27,9 @@ namespace OTIK_Encoder
             header.SetContextBasedCompressionType(cbCompr);
             header.SetEntropicBasedCompressionType(entCompr);
 
-            // todo write header
+            var arcSaver = new ArchiveSaver(output);
+
+            //arcSaver.
 
             var handler1 = new RandomSplitter(true);
             var handlingStruct = new FileHandlingStruct() {randomSplit_1 = rSplitting == RandSplitType.RandomSplit };
@@ -42,9 +45,10 @@ namespace OTIK_Encoder
 
         public static void Decode(string input, string output)
         {
-            if (!FileLoader.PathIsCorrect(input)       // todo check this shit
-                || !FileLoader.PathIsCorrect(output))
+            if (!ArchiveLoader.IsCorrectArchivePath(input))
                 throw new Exception("Input path is incorrect!");
+            if (!FileSaver.IsCorrectSavePath(output))
+                throw new Exception("Output path is incorrect!");
 
             var manager = new FileLoader(input);
 

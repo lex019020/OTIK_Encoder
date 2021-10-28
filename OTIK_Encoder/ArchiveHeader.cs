@@ -240,7 +240,7 @@ namespace OTIK_Encoder
         {
             if(_isReadFromFile) return;
             if (fcount >= Math.Pow(2, 24)) throw new Exception("WTF are you trying to compress????");
-            _fileCount = fcount;
+            _fileCount = (uint) fcount;
         }
     }
 }
