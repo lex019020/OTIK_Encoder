@@ -2,9 +2,9 @@
 
 namespace OTIK_Encoder
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             if (args.Length == 0)
             {
@@ -19,7 +19,7 @@ namespace OTIK_Encoder
 
             switch (args[0]) // mode
             {
-                case "-c":  // compress
+                case "-c": // compress
                     mode = 'c';
 
                     if (args.Length != 4)
@@ -29,9 +29,9 @@ namespace OTIK_Encoder
                         return;
                     }
 
-                    switch (args[1])    // compression types
+                    switch (args[1]) // compression types
                     {
-                        case "r1":      // random splitting
+                        case "r1": // random splitting
 
                             var rSplitting = RandSplitType.RandomSplit;
                             var entCompr = EntropicBasedCompressionType.None;
@@ -58,7 +58,7 @@ namespace OTIK_Encoder
                     }
 
                     break;
-                case "-d":  // decompress
+                case "-d": // decompress
                     mode = 'd';
 
                     if (args.Length != 3)
@@ -82,7 +82,7 @@ namespace OTIK_Encoder
 
 
                     break;
-                case "-t":  // test
+                case "-t": // test
                     mode = 't';
 
                     if (args.Length != 2)
@@ -91,7 +91,7 @@ namespace OTIK_Encoder
                         PrintHelp();
                         return;
                     }
-                    
+
                     inpath = args[2];
 
                     try
@@ -105,7 +105,7 @@ namespace OTIK_Encoder
                     }
 
                     break;
-                case "-l":  // list
+                case "-l": // list
                     mode = 'l';
 
                     if (args.Length != 2)
@@ -122,12 +122,8 @@ namespace OTIK_Encoder
                         var files = ArchiveProcessor.ListFiles(inpath);
                         Console.WriteLine("Files list:   [size  name]");
                         Console.WriteLine("");
-                        foreach (var filestr in files)
-                        {
-                            Console.WriteLine(filestr);
-                        }
+                        foreach (var filestr in files) Console.WriteLine(filestr);
                         Console.WriteLine("");
-
                     }
                     catch (Exception e)
                     {
@@ -155,11 +151,13 @@ namespace OTIK_Encoder
             Console.WriteLine("     -t  Testing");
             Console.WriteLine("     -l  Files list");
             Console.WriteLine("");
-            Console.WriteLine(" [compression modes] (only if mode is -c) is list of applied encoding/compression algorithms:");
+            Console.WriteLine(
+                " [compression modes] (only if mode is -c) is list of applied encoding/compression algorithms:");
             Console.WriteLine("     r1 Split files to random pieces size of 1-16 bytes");
             Console.WriteLine("");
             Console.WriteLine(" [output] (only in modes -c/-d)");
-            Console.WriteLine("     output filename (for -c) or path (for -d); if contains whitespaces - write it in double quotes");
+            Console.WriteLine(
+                "     output filename (for -c) or path (for -d); if contains whitespaces - write it in double quotes");
             Console.WriteLine("");
             Console.WriteLine(" *[input] is input file / directory");
             Console.WriteLine("     if input path contains whitespaces, path must be in double quotes");

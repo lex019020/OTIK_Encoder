@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace OTIK_Encoder
 {
-    class FileHolder
+    internal class FileHolder
     {
-        private string _name;
-        private List<byte> _data;
+        private readonly List<byte> _data;
+        private readonly string _name;
 
         public FileHolder(string name, in List<byte> data)
         {
@@ -29,13 +25,12 @@ namespace OTIK_Encoder
 
         public uint getDataLength()
         {
-            return (uint)_data.Count;
+            return (uint) _data.Count;
         }
 
         public ushort getNameLength()
         {
-            return (ushort)_name.Length;
+            return (ushort) _name.Length;
         }
-
     }
 }

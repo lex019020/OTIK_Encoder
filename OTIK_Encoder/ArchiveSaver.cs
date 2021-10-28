@@ -6,20 +6,14 @@ using System.Text;
 
 namespace OTIK_Encoder
 {
-    class ArchiveSaver
+    internal class ArchiveSaver
     {
-
-        public static bool IsCorrectArchivePath(string path)
-        {
-            return false;
-        }
-        
         private readonly FileInfo fileInfo;
         private readonly FileStream stream;
 
         public ArchiveSaver(string filename)
         {
-            if(!IsCorrectArchivePath(filename)) return;
+            if (!IsCorrectArchivePath(filename)) return;
 
             fileInfo = new FileInfo(filename);
 
@@ -27,6 +21,11 @@ namespace OTIK_Encoder
                 fileInfo.Create();
 
             stream = fileInfo.OpenWrite();
+        }
+
+        public static bool IsCorrectArchivePath(string path)
+        {
+            return false;
         }
 
         public void AppendBytes(IReadOnlyList<byte> bytes)
@@ -56,6 +55,5 @@ namespace OTIK_Encoder
             stream.Dispose();
             fileInfo.Delete();
         }
-
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Exception = System.Exception;
 
 namespace OTIK_Encoder
 {
@@ -13,46 +12,46 @@ namespace OTIK_Encoder
         IncorrectEntropicComprType,
         IncorrectContextBasedComprType,
         IncorrectAntiInterfType,
-        UnsupportedFeatures,
-    };
+        UnsupportedFeatures
+    }
 
     public enum RandSplitType
     {
         NoSplit,
-        RandomSplit,
-    };
+        RandomSplit
+    }
 
     public enum EntropicBasedCompressionType
     {
-        None,
-    };
+        None
+    }
 
     public enum ContextBasedCompressionType
     {
-        None,
-    };
+        None
+    }
 
     public enum AntiInterferenceType
     {
-        None,
-    };
+        None
+    }
 
     public enum Version
     {
-        V1,
+        V1
     }
 
-    class ArchiveHeader // version 1
+    internal class ArchiveHeader // version 1
     {
-        private byte _version, _randSplit, _entrCompr, _cbCompr, _antiinterf;
-        private uint _fileCount;
-        private readonly bool _isReadFromFile;
         private readonly HashSet<HeaderError> _errors = new();
+        private readonly bool _isReadFromFile;
+        private uint _fileCount;
+        private byte _version, _randSplit, _entrCompr, _cbCompr, _antiinterf;
 
         /// <summary>
-        /// Use this constructor when creating new header.
-        /// Default header is:
-        /// Version: 1; all compression types are disabled; 0 files.
+        ///     Use this constructor when creating new header.
+        ///     Default header is:
+        ///     Version: 1; all compression types are disabled; 0 files.
         /// </summary>
         public ArchiveHeader()
         {
@@ -66,7 +65,7 @@ namespace OTIK_Encoder
         }
 
         /// <summary>
-        /// Use this constructor when yao want to read header from file
+        ///     Use this constructor when yao want to read header from file
         /// </summary>
         /// <param name="headerBytes">First 12 bytes of file</param>
         public ArchiveHeader(IReadOnlyList<byte> headerBytes)
@@ -79,16 +78,11 @@ namespace OTIK_Encoder
             }
 
             if (headerBytes[0] != 0x4b || headerBytes[1] != 0x45 || headerBytes[2] != 0x4b || headerBytes[3] != 0x57)
-            {
                 _errors.Add(HeaderError.IncorrectSignature);
-            }
 
             _version = headerBytes[4];
 
-            if (_version > 0)
-            {
-                _errors.Add(HeaderError.NewerVersion);
-            }
+            if (_version > 0) _errors.Add(HeaderError.NewerVersion);
 
             _randSplit = headerBytes[5];
             _entrCompr = headerBytes[6];
@@ -96,9 +90,9 @@ namespace OTIK_Encoder
             _antiinterf = headerBytes[8];
 
             _fileCount = 0;
-            _fileCount += (uint) ((uint)headerBytes[9] << 16);
-            _fileCount += (uint) ((uint)headerBytes[10] << 8);
-            _fileCount += (uint)  headerBytes[11];
+            _fileCount += (uint) headerBytes[9] << 16;
+            _fileCount += (uint) headerBytes[10] << 8;
+            _fileCount += headerBytes[11];
 
             if (_randSplit > 1)
             {
@@ -125,24 +119,45 @@ namespace OTIK_Encoder
             }
         }
 
-        public bool HasErrors() => _errors.Count > 0;
+        public bool HasErrors()
+        {
+            return _errors.Count > 0;
+        }
 
-        public HashSet<HeaderError> GetErrors() => _errors;
+        public HashSet<HeaderError> GetErrors()
+        {
+            return _errors;
+        }
 
-        public uint GetFileCount() => HasErrors() ? 0 : _fileCount;
+        public uint GetFileCount()
+        {
+            return HasErrors() ? 0 : _fileCount;
+        }
 
-        public Version GetVersion() =>  HasErrors() ? 0 : (Version)_version;
+        public Version GetVersion()
+        {
+            return HasErrors() ? 0 : (Version) _version;
+        }
 
-        public RandSplitType GetRandSplitType() => HasErrors() ? 0 : (RandSplitType) _randSplit;
+        public RandSplitType GetRandSplitType()
+        {
+            return HasErrors() ? 0 : (RandSplitType) _randSplit;
+        }
 
         public EntropicBasedCompressionType GEntropicBasedCompressionType()
-            => HasErrors() ? 0 : (EntropicBasedCompressionType) _entrCompr;
+        {
+            return HasErrors() ? 0 : (EntropicBasedCompressionType) _entrCompr;
+        }
 
         public ContextBasedCompressionType GetContextBasedCompressionType()
-            => HasErrors() ? 0 : (ContextBasedCompressionType) _cbCompr;
+        {
+            return HasErrors() ? 0 : (ContextBasedCompressionType) _cbCompr;
+        }
 
         public AntiInterferenceType GetAntiInterferenceType()
-            => HasErrors() ? 0 : (AntiInterferenceType) _antiinterf;
+        {
+            return HasErrors() ? 0 : (AntiInterferenceType) _antiinterf;
+        }
 
         public IReadOnlyList<byte> GetHeaderBytes()
         {
@@ -183,7 +198,7 @@ namespace OTIK_Encoder
         }
 
         /// <summary>
-        /// Set header version. If header is read from file, method does nothing.
+        ///     Set header version. If header is read from file, method does nothing.
         /// </summary>
         /// <param name="version"></param>
         public void SetVersion(Version version)
@@ -193,7 +208,7 @@ namespace OTIK_Encoder
         }
 
         /// <summary>
-        /// Set random splitting type. If header is read from file, method does nothing.
+        ///     Set random splitting type. If header is read from file, method does nothing.
         /// </summary>
         /// <param name="type"></param>
         public void SetRandSplitType(RandSplitType type)
@@ -203,7 +218,7 @@ namespace OTIK_Encoder
         }
 
         /// <summary>
-        /// Set entropic-based compression type. If header is read from file, method does nothing.
+        ///     Set entropic-based compression type. If header is read from file, method does nothing.
         /// </summary>
         /// <param name="type"></param>
         public void SetEntropicBasedCompressionType(EntropicBasedCompressionType type)
@@ -213,7 +228,7 @@ namespace OTIK_Encoder
         }
 
         /// <summary>
-        /// Set context-based compression type. If header is read from file, method does nothing.
+        ///     Set context-based compression type. If header is read from file, method does nothing.
         /// </summary>
         /// <param name="type"></param>
         public void SetContextBasedCompressionType(ContextBasedCompressionType type)
@@ -223,7 +238,7 @@ namespace OTIK_Encoder
         }
 
         /// <summary>
-        /// Set anti-interference algorithm type. If header is read from file, method does nothing.
+        ///     Set anti-interference algorithm type. If header is read from file, method does nothing.
         /// </summary>
         /// <param name="type"></param>
         public void SetAntiInterferenceType(AntiInterferenceType type)
@@ -233,12 +248,12 @@ namespace OTIK_Encoder
         }
 
         /// <summary>
-        /// Set files count. Limit: 2^24. If header is read from file, method does nothing.
+        ///     Set files count. Limit: 2^24. If header is read from file, method does nothing.
         /// </summary>
         /// <param name="fcount">Limit: 2^24</param>
         public void SetFilesCount(int fcount)
         {
-            if(_isReadFromFile) return;
+            if (_isReadFromFile) return;
             if (fcount >= Math.Pow(2, 24)) throw new Exception("WTF are you trying to compress????");
             _fileCount = (uint) fcount;
         }

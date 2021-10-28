@@ -1,27 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace OTIK_Encoder
 {
-    class FileLoader
+    internal class FileLoader
     {
         private readonly string _dirPath = "";
         private readonly List<string> _fileNames;
-        private readonly bool _isDirectory = false;
-        private int _currentNum = 0;
-
-        public static bool IsCorrectLoadPath (string path)
-        {
-            return File.Exists(path) || Directory.Exists(path);
-        }
+        private readonly bool _isDirectory;
+        private int _currentNum;
 
         public FileLoader(string path)
         {
-            _fileNames = new();
+            _fileNames = new List<string>();
             if (Directory.Exists(path))
             {
                 _dirPath = path;
@@ -32,32 +24,39 @@ namespace OTIK_Encoder
                 _isDirectory = true;
             }
             else if (File.Exists(path))
+            {
                 _fileNames.Add(path);
+            }
+        }
+
+        public static bool IsCorrectLoadPath(string path)
+        {
+            return File.Exists(path) || Directory.Exists(path);
         }
 
         /// <summary>
-        /// Returns true, while return data is valid
+        ///     Returns true, while return data is valid
         /// </summary>
         /// <param name="bytes">bytes, that file contains</param>
         /// <param name="name">relative file path or filename</param>
         /// <returns></returns>
         public bool GetNextFile(out List<byte> bytes, out string name)
         {
-            if(_fileNames.Count == _currentNum)
+            if (_fileNames.Count == _currentNum)
             {
-                bytes = new();
+                bytes = new List<byte>();
                 name = "";
                 return false;
             }
 
-            if(!_isDirectory)
+            if (!_isDirectory)
             {
                 name = _fileNames[0].Substring(_fileNames[0].LastIndexOf('\\') + 1);
-                bytes = new(File.ReadAllBytes(_fileNames[0]));
+                bytes = new List<byte>(File.ReadAllBytes(_fileNames[0]));
                 return false;
             }
 
-            bytes = new(File.ReadAllBytes(_fileNames[_currentNum]));
+            bytes = new List<byte>(File.ReadAllBytes(_fileNames[_currentNum]));
             name = _fileNames[_currentNum].TrimStart(_dirPath.ToCharArray());
             _currentNum++;
             return true;

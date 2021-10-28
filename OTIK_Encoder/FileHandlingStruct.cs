@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace OTIK_Encoder
 {
-    struct FileHandlingStruct
+    internal struct FileHandlingStruct
     {
         public bool randomSplit_1;
         public List<byte> bytes;

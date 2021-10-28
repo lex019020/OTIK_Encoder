@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OTIK_Encoder
 {
-    class ArchiveProcessor
+    internal class ArchiveProcessor
     {
-        public static void Encode(RandSplitType rSplitting, EntropicBasedCompressionType entCompr, 
-            ContextBasedCompressionType cbCompr, AntiInterferenceType antiInterf, 
+        public static void Encode(RandSplitType rSplitting, EntropicBasedCompressionType entCompr,
+            ContextBasedCompressionType cbCompr, AntiInterferenceType antiInterf,
             string input, string output)
         {
             if (!FileLoader.IsCorrectLoadPath(input))
@@ -32,7 +28,7 @@ namespace OTIK_Encoder
             arcSaver.AppendBytes(header.GetHeaderBytes());
 
             var handler1 = new RandomSplitter(true);
-            var handlingStruct = new FileHandlingStruct()
+            var handlingStruct = new FileHandlingStruct
             {
                 randomSplit_1 = rSplitting == RandSplitType.RandomSplit
             };
@@ -41,7 +37,7 @@ namespace OTIK_Encoder
             {
                 handlingStruct.bytes = bytes;
                 handler1.Handle(ref handlingStruct);
-                
+
                 arcSaver.AppendFile(name, bytes);
             }
 
@@ -54,9 +50,9 @@ namespace OTIK_Encoder
                 throw new Exception("Input path is incorrect!");
             if (!FileSaver.IsCorrectSavePath(output))
                 throw new Exception("Output path is incorrect!");
-            
+
             var saver = new FileSaver(output);
-            
+
             var arcLoader = new ArchiveLoader(input);
             var header = arcLoader.GetArchiveHeader();
 
@@ -64,7 +60,7 @@ namespace OTIK_Encoder
                 throw new Exception("Archive header contains errors!");
 
             var handler1 = new RandomSplitter(false);
-            var handlingStruct = new FileHandlingStruct()
+            var handlingStruct = new FileHandlingStruct
             {
                 randomSplit_1 = header.GetRandSplitType() == RandSplitType.RandomSplit
             };
@@ -76,6 +72,7 @@ namespace OTIK_Encoder
 
                 saver.AddFile(name, handlingStruct.bytes);
             }
+
             arcLoader.CloseStream();
         }
 
@@ -85,10 +82,10 @@ namespace OTIK_Encoder
                 throw new Exception("Input path is incorrect!");
 
             var arcLoader = new ArchiveLoader(path);
-
+            var files = arcLoader.GetArchiveContent();
 
             arcLoader.CloseStream();
-            return new List<string>();// todo
+            return files;
         }
 
         public static bool CheckErrors(string path)
@@ -96,7 +93,11 @@ namespace OTIK_Encoder
             if (!ArchiveLoader.IsCorrectArchivePath(path))
                 throw new Exception("Input path is incorrect!");
 
-            return false; // todo
+            var arcLoader = new ArchiveLoader(path);
+            var errors = arcLoader.GetArchiveHeader().HasErrors();
+
+            arcLoader.CloseStream();
+            return errors;
         }
     }
 }
