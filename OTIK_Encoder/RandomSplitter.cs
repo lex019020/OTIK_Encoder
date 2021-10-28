@@ -6,7 +6,7 @@ namespace OTIK_Encoder
     class RandomSplitter : IHandler
     {
         private IHandler _nextHandler;
-        private bool _encode;
+        private readonly bool _encode;
 
         public RandomSplitter(bool encode)
         {
@@ -14,7 +14,7 @@ namespace OTIK_Encoder
             _nextHandler = null;
         }
 
-        public void Split(ref List<byte> data)
+        private void Split(ref List<byte> data)
         {
             var rand = new Random();
 
@@ -44,7 +44,7 @@ namespace OTIK_Encoder
             data.AddRange(result);
         }
 
-        public void Join(ref List<byte> data)
+        private void Join(ref List<byte> data)
         {
             int blocksNumber = 0;
             blocksNumber += ((int)data[0]) << 24;
@@ -80,7 +80,6 @@ namespace OTIK_Encoder
                     Split(ref handlingStruct.bytes);
                 else
                     Join(ref handlingStruct.bytes);
-
             }
 
             if (_nextHandler != null)
