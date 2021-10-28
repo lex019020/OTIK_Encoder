@@ -16,7 +16,6 @@ namespace OTIK_Encoder
             string inpath;
             string outpath;
             char mode;
-            byte rSplitting = 0, entCompr = 0, cbCompr = 0, antiInterf = 0; 
 
             switch (args[0]) // mode
             {
@@ -34,10 +33,22 @@ namespace OTIK_Encoder
                     {
                         case "r1":      // random splitting
 
+                            var rSplitting = RandSplitType.RandomSplit;
+                            var entCompr = EntropicBasedCompressionType.None;
+                            var cbCompr = ContextBasedCompressionType.None;
+                            var antiInterf = AntiInterferenceType.None;
                             outpath = args[2];
                             inpath = args[3];
 
-                            // todo call methods
+                            try
+                            {
+                                ArchiveProcessor.Encode(rSplitting, entCompr, cbCompr,
+                                    antiInterf, inpath, outpath);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
 
                             break;
                         default:
@@ -60,7 +71,14 @@ namespace OTIK_Encoder
                     outpath = args[1];
                     inpath = args[2];
 
-                    // todo call methods
+                    try
+                    {
+                        ArchiveProcessor.Decode(inpath, outpath);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
 
 
                     break;
@@ -76,7 +94,15 @@ namespace OTIK_Encoder
                     
                     inpath = args[2];
 
-                    // todo call methods
+                    try
+                    {
+                        var hasErrors = ArchiveProcessor.CheckErrors(inpath);
+                        Console.WriteLine(hasErrors ? "Archive file has errors!" : "Archive file is OK");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
 
                     break;
                 case "-l":  // list
@@ -91,7 +117,22 @@ namespace OTIK_Encoder
 
                     inpath = args[2];
 
-                    // todo call methods
+                    try
+                    {
+                        var files = ArchiveProcessor.ListFiles(inpath);
+                        Console.WriteLine("Files list:   [size  name]");
+                        Console.WriteLine("");
+                        foreach (var filestr in files)
+                        {
+                            Console.WriteLine(filestr);
+                        }
+                        Console.WriteLine("");
+
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
 
                     break;
                 default:
