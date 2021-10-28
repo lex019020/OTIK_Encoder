@@ -25,7 +25,7 @@ namespace OTIK_Encoder
 
         public static bool IsCorrectArchivePath(string path)
         {
-            return false;
+            return !Directory.Exists(path) && path.EndsWith(".otik");
         }
 
         public void AppendBytes(IReadOnlyList<byte> bytes)
