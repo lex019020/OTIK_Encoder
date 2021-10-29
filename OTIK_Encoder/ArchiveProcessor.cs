@@ -33,12 +33,20 @@ namespace OTIK_Encoder
                 randomSplit_1 = rSplitting == RandSplitType.RandomSplit
             };
 
-            while (manager.GetNextFile(out var bytes, out var name))
+            try
             {
-                handlingStruct.bytes = bytes;
-                handler1.Handle(ref handlingStruct);
+                while (manager.GetNextFile(out var bytes, out var name))
+                {
+                    handlingStruct.bytes = bytes;
+                    handler1.Handle(ref handlingStruct);
 
-                arcSaver.AppendFile(name, bytes);
+                    arcSaver.AppendFile(name, bytes);
+                }
+            }
+            catch(Exception)
+            {
+                arcSaver.DeleteAndCloseConnection();
+                throw;
             }
 
             arcSaver.CloseConnection();

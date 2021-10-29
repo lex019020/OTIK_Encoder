@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text
 
 namespace OTIK_Encoder
 {
@@ -51,13 +52,18 @@ namespace OTIK_Encoder
 
             if (!_isDirectory)
             {
-                name = _fileNames[0].Substring(_fileNames[0].LastIndexOf('\\') + 1);
+                name = _fileNames[0][(_fileNames[0].LastIndexOf('\\') + 1)..];
                 bytes = new List<byte>(File.ReadAllBytes(_fileNames[0]));
                 _currentNum++;
                 return true;
             }
 
             bytes = new List<byte>(File.ReadAllBytes(_fileNames[_currentNum]));
+
+            // check to not compress compressed files
+            if (Encoding.Unicode.GetString(bytes.GetRange(0, 4).ToArray()) == "KEKW")
+                throw new System.Exception("Compressing .otik files is forbidden!");
+
             name = _fileNames[_currentNum].TrimStart(_dirPath.ToCharArray());
             _currentNum++;
             return true;
